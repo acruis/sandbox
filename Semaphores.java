@@ -1,6 +1,6 @@
 import java.util.concurrent.Semaphore;
 
-public class Sandbox {
+public class Semaphores {
 
 	public static final Semaphore available = new Semaphore(1, true);
 

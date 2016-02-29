@@ -1,4 +1,4 @@
-public class Sandbox {
+public class SleepingBarber {
 	public static int cust = 0;
 	public static final int maxSeats = 3;
 	public static Object custs = new Object();
