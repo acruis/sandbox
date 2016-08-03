@@ -3,8 +3,11 @@ One
 <<<<<<< HEAD
 Two
 Three
+<<<<<<< HEAD
 =======
 >>>>>>> One
 =======
 Two
 >>>>>>> Two
+=======
+>>>>>>> Three
