@@ -25,5 +25,9 @@ public class FloatingPoint {
 		System.out.println("((a+b)+d)+c = " + (((a+b)+d)+c));
 		System.out.println("a+b = " + (a+b));
 		System.out.println("(a+b)+d = " + ((a+b)+d));
+		System.out.println("---");
+		System.out.println("((b+d)+a)+c = " + (((b+d)+a)+c));
+		System.out.println("b+d = " + (b+d));
+		System.out.println("(b+d)+a = " + ((b+d)+a));
 	}
 }
