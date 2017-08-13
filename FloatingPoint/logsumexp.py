@@ -21,10 +21,9 @@ class format:
 
 k = 6
 
-# Generate k proportions summing up to 1
+# Generate k proportions
 
 proportions = np.random.rand(k)
-proportions = proportions / proportions.sum()
 print format.bold("Proportions"), proportions
 
 # Take their logs
