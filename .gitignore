@@ -13,3 +13,6 @@ hs_err_pid*
 
 # Mac #
 .DS_Store
+
+# XCode #
+*.xcuserdatad
