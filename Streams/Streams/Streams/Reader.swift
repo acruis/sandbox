@@ -44,7 +44,7 @@ class Reader: NSObject, StreamDelegate {
         processString()
     }
     
-    private func errorOccurred() {
+    func errorOccurred() {
         // We don't deal with error-occurred situation here, as we already deal with it in the Writer side,
         // and the streams are coupled.
         self.inputStream?.close()

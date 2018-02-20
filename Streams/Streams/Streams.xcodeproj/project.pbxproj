@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		D760C198203C483A0025F131 /* Paralyzer.swift in Sources */ = {isa = PBXBuildFile; fileRef = D760C197203C48390025F131 /* Paralyzer.swift */; };
 		D79679F320285D890057D801 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D79679F220285D890057D801 /* AppDelegate.swift */; };
 		D79679F520285D890057D801 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D79679F420285D890057D801 /* ViewController.swift */; };
 		D79679F820285D890057D801 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D79679F620285D890057D801 /* Main.storyboard */; };
@@ -17,6 +18,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		D760C197203C48390025F131 /* Paralyzer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Paralyzer.swift; sourceTree = "<group>"; };
 		D79679EF20285D890057D801 /* Streams.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Streams.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D79679F220285D890057D801 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		D79679F420285D890057D801 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -62,6 +64,7 @@
 				D79679F420285D890057D801 /* ViewController.swift */,
 				D7EFCE0020299A1B00A1E285 /* Writer.swift */,
 				D7EFCE1A202D84C000A1E285 /* Reader.swift */,
+				D760C197203C48390025F131 /* Paralyzer.swift */,
 				D79679F620285D890057D801 /* Main.storyboard */,
 				D79679F920285D890057D801 /* Assets.xcassets */,
 				D79679FB20285D890057D801 /* LaunchScreen.storyboard */,
@@ -142,6 +145,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D760C198203C483A0025F131 /* Paralyzer.swift in Sources */,
 				D7EFCE1B202D84C000A1E285 /* Reader.swift in Sources */,
 				D7EFCE0120299A1B00A1E285 /* Writer.swift in Sources */,
 				D79679F520285D890057D801 /* ViewController.swift in Sources */,

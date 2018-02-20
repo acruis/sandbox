@@ -13,6 +13,9 @@ class ViewController: UIViewController, ReaderDelegate {
 
     private let writer = Writer()
     private let reader = Reader()
+    private let paralyzer = Paralyzer()
+    
+    private var paralyzingStream: OutputStream? // Only one is enough; even if the other is dealloc'd the connection is maintained.
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -60,5 +63,22 @@ class ViewController: UIViewController, ReaderDelegate {
     
     func packageReceived(package: String) {
         print(package)
+    }
+    
+    // - MARK: Destruction
+    
+    @IBAction func establishParalyzingStream(_ sender: UIButton) {
+        var inputStream: InputStream?
+        
+        Stream.getStreamsToHost(withName: "127.0.0.1", port: 5000, inputStream: &inputStream, outputStream: &paralyzingStream)
+        
+        guard let paralyzingStream = paralyzingStream else {
+            return
+        }
+        
+        paralyzingStream.schedule(in: .current, forMode: .defaultRunLoopMode)
+        self.paralyzer.setParalyzingStream(stream: paralyzingStream)
+        
+        paralyzingStream.open()
     }
 }

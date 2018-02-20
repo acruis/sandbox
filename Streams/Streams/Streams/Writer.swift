@@ -44,7 +44,7 @@ class Writer: NSObject, StreamDelegate {
         }
     }
     
-    private func errorOccurred() {
+    func errorOccurred() {
         self.outputStream?.close()
         self.outputStream = nil
         self.dataToWrite = Data()
