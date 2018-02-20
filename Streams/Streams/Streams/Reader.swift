@@ -71,10 +71,8 @@ class Reader: NSObject, StreamDelegate {
         switch eventCode {
         case .errorOccurred:
             errorOccurred()
-            break
         case .hasBytesAvailable:
             readIntoString()
-            break
         default:
             break
         }

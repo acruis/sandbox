@@ -56,13 +56,54 @@ class Writer: NSObject, StreamDelegate {
     func stream(_ aStream: Stream, handle eventCode: Stream.Event) {
         switch eventCode {
         case .errorOccurred:
-            self.errorOccurred()
-            break
+            errorOccurred()
         case .hasSpaceAvailable:
             writeToStream()
-            break
         default:
             break
         }
+    }
+    
+    // - MARK: Stream diagnostics
+    
+    func printPortAndIP() {
+        guard let outputStream = outputStream else {
+            return
+        }
+        
+        // Get the socket handle.
+        let socketHandleDataRef = outputStream.property(forKey: Stream.PropertyKey(CFStreamPropertyKey.socketNativeHandle.rawValue as String)) as CFTypeRef
+        guard CFGetTypeID(socketHandleDataRef) == CFDataGetTypeID() else {
+            return
+        }
+        let socketHandleData = socketHandleDataRef as! CFData
+        
+        // Get the socket.
+        let socketPointer = UnsafeMutablePointer<UInt8>.allocate(capacity: 1)
+        CFDataGetBytes(socketHandleData, CFRangeMake(0, MemoryLayout<CFSocketNativeHandle>.size), socketPointer)
+        guard let socket = CFSocketCreateWithNative(nil, CFSocketNativeHandle(socketPointer.pointee), 0, nil, nil) else {
+            return
+        }
+        
+        // Get the socket address.
+        let addressDataRef = CFSocketCopyPeerAddress(socket) as CFTypeRef
+        guard CFGetTypeID(addressDataRef) == CFDataGetTypeID() else {
+            return
+        }
+        let addressData = addressDataRef as! CFData
+        
+        // Convert it into sockaddr_storage.
+        guard let sockAddressRawPointer = UnsafeRawPointer(CFDataGetBytePtr(addressData)) else {
+            return
+        }
+        
+        var sockAddress = sockAddressRawPointer.bindMemory(to: sockaddr_in.self, capacity: 1).pointee
+        var addressStringBytes = [Int8](repeating: 0, count: Int(INET_ADDRSTRLEN))
+        inet_ntop(Int32(sockAddress.sin_family), &(sockAddress.sin_addr), &addressStringBytes, socklen_t(INET_ADDRSTRLEN))
+        let addressString = String(cString: addressStringBytes)
+        
+        print("Port: \(sockAddress.sin_port.bigEndian)") // Network byte order is defined to always be big-endian.
+        print("IP Address: \(addressString)")
+        print("Raw string bytes: \(addressStringBytes)")
     }
 }

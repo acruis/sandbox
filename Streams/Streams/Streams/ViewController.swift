@@ -11,7 +11,6 @@ import UIKit
 class ViewController: UIViewController, ReaderDelegate {
     @IBOutlet weak var userIDTextField: UITextField!
 
-    var inputStream: InputStream?
     private let writer = Writer()
     private let reader = Reader()
 
@@ -25,7 +24,7 @@ class ViewController: UIViewController, ReaderDelegate {
         var unretainedInputStream: Unmanaged<CFReadStream>?
         var unretainedOutputStream: Unmanaged<CFWriteStream>?
         CFStreamCreatePairWithSocketToHost(kCFAllocatorDefault, "127.0.0.1" as CFString, 5000, &unretainedInputStream, &unretainedOutputStream)
-        
+
         guard let inputStream: InputStream = unretainedInputStream?.takeRetainedValue(),
             let outputStream: OutputStream = unretainedOutputStream?.takeRetainedValue() else {
             return
@@ -51,6 +50,10 @@ class ViewController: UIViewController, ReaderDelegate {
         }
         
         writer.sendMessage(message: "{\"command\":99,\"requestID\":100000,\"payload\":\"\(userID)\"}:::")
+    }
+    
+    @IBAction func printPortAndIPAddress() {
+        writer.printPortAndIP()
     }
     
     // - MARK: ReaderDelegate
