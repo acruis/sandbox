@@ -1,0 +1,11 @@
+This file tests what happens for this flow:
+
+b1 -- c1 -- c2 --v
+b2 -- c2 --^ -----??
+
+(after c1, b1 merges from b2, then b2 merges from b1)
+
+c1: append "c1" before '== base line =='
+c2: append "c2" after '== base line =='
+
+== base line ==
