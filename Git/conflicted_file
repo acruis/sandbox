@@ -11,3 +11,6 @@ c2: append "c2" after '== base line =='
 c1
 == base line ==
 c2
+
+Result:
+Merging b2 into b1 cannot be fast-forwarded, but merging b1 into b2 afterwards is fast-forwarded.
