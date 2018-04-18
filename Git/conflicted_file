@@ -9,3 +9,4 @@ c1: append "c1" before '== base line =='
 c2: append "c2" after '== base line =='
 
 == base line ==
+c2
