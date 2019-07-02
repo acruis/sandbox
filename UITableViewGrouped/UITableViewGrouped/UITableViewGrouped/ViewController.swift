@@ -10,10 +10,17 @@ import UIKit
 
 class ViewController: UIViewController {
 
-    let tableView: UITableView = UITableView(frame: CGRect(x: 30, y: 30, width: 300, height: 600),
+    private lazy var contentInsetButton: UIButton = {
+        let contentInsetButton = UIButton(type: .system)
+        contentInsetButton.setTitle("Add content inset", for: .normal)
+        contentInsetButton.addTarget(self, action: #selector(didTapContentInsetButton), for: .touchUpInside)
+        return contentInsetButton
+    }()
+
+    let tableView: UITableView = UITableView(frame: CGRect(x: 30, y: 30, width: 150, height: 600),
                                              style: .grouped)
     let headerView: UIView = {
-        let headerView = UILabel(frame: CGRect(x: 0, y: 0, width: 300, height: 30))
+        let headerView = UILabel(frame: CGRect(x: 0, y: 0, width: 150, height: 30))
         headerView.backgroundColor = .green
         headerView.text = "Table header view"
         return headerView
@@ -56,6 +63,26 @@ class ViewController: UIViewController {
         tableView.sectionFooterHeight = 0 // (2)
 
         self.view.addSubview(tableView)
+
+        contentInsetButton.frame = CGRect(x: 210, y: 30, width: 150, height: 30)
+        self.view.addSubview(contentInsetButton)
+    }
+
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        tableView.contentInset = UIEdgeInsets(top: 100, left: 0, bottom: 0, right: 0)
+    }
+
+    override func viewWillLayoutSubviews() {
+        super.viewWillLayoutSubviews()
+//        tableView.contentInset = UIEdgeInsets(top: 100, left: 0, bottom: 0, right: 0)
+    }
+
+    @objc func didTapContentInsetButton() {
+        self.tableView.contentInset = UIEdgeInsets(top: self.tableView.contentInset.top + 50,
+                                                   left: self.tableView.contentInset.left,
+                                                   bottom: self.tableView.contentInset.bottom,
+                                                   right: self.tableView.contentInset.right)
     }
 }
 
