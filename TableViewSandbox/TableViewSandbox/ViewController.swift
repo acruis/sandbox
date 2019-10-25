@@ -10,6 +10,8 @@ import UIKit
 
 class ViewController: UIViewController {
 
+    private var s1r1isBig: Bool = false
+
     private lazy var boopButton: UIButton = {
         let boopButton = UIButton(type: .system)
         boopButton.setTitle("Boop", for: .normal)
@@ -32,7 +34,8 @@ class ViewController: UIViewController {
         self.view.backgroundColor = UIColor.lightGray
         tableView.backgroundColor = UIColor.gray
 
-        tableView.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
+        tableView.register(SandboxCell.self, forCellReuseIdentifier: "cell")
+        tableView.clipsToBounds = false
 
         tableView.bounces = false
 
@@ -69,7 +72,13 @@ class ViewController: UIViewController {
     }
 
     @objc func didTapBoopButton() {
-        // Do whatever
+        s1r1isBig.toggle()
+        triggerHeightChangeAnimation()
+    }
+
+    private func triggerHeightChangeAnimation() {
+        tableView.beginUpdates()
+        tableView.endUpdates()
     }
 }
 
@@ -127,5 +136,13 @@ extension ViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
         // Have to implement this for `heightForFooterInSection` to take effect.
         return nil
+    }
+
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        if indexPath.section != 0 || indexPath.row != 1 {
+            return 44
+        }
+
+        return s1r1isBig ? 84 : 44
     }
 }
