@@ -98,9 +98,12 @@ extension ViewController {
         let coloredBox = UIView(frame: .zero)
         coloredBox.backgroundColor = colors.randomElement()
         // Width
-        NSLayoutConstraint(item: coloredBox, attribute: .width, relatedBy: .equal, toItem: nil, attribute: .notAnAttribute, multiplier: 1, constant: 100).isActive = true
+        let widthConstraint = NSLayoutConstraint(item: coloredBox, attribute: .width, relatedBy: .equal, toItem: nil, attribute: .notAnAttribute, multiplier: 1, constant: 100)
+        widthConstraint.isActive = true
         // Height
-        NSLayoutConstraint(item: coloredBox, attribute: .height, relatedBy: .equal, toItem: nil, attribute: .notAnAttribute, multiplier: 1, constant: 45).isActive = true
+        let heightConstraint = NSLayoutConstraint(item: coloredBox, attribute: .height, relatedBy: .equal, toItem: nil, attribute: .notAnAttribute, multiplier: 1, constant: 45)
+        heightConstraint.priority = .required - 1 // Allows top and bottom cells to animate properly!
+        heightConstraint.isActive = true
         return coloredBox
     }
 
