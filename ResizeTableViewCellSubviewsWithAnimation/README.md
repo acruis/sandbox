@@ -28,7 +28,7 @@ override func layoutSubviews() {
 ## Incompatibility with cell resize animation
 
 An example of the above method is in
-[`SandboxCell`'s `layoutSubviews` method implementation](/ResizeTableViewCellSubviewsWithAnimation/SandboxCell.swift),
+[`SandboxCell`'s `layoutSubviews` method implementation](/ResizeTableViewCellSubviewsWithAnimation/ResizeTableViewCellSubviewsWithAnimation/SandboxCell.swift),
 particularly when (1) is commented out and (2) is uncommented.
 
 However, when running this project, when pressing the button to resize the cell, the growing cell will output three lines,
