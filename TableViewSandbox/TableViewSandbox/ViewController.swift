@@ -10,12 +10,35 @@ import UIKit
 
 class ViewController: UIViewController {
 
+    private var movieNames = [
+        "The Shawshank Redemption (1994)",
+        "The Godfather (1972)",
+        "The Dark Knight (2008)",
+        "The Godfather: Part II (1974)",
+        "The Lord of the Rings: The Return of the King (2003)",
+        "Pulp Fiction (1994)",
+        "Schindler's List (1993)",
+        "12 Angry Men (1957)",
+        "Inception (2010)",
+        "Fight Club (1999)",
+    ]
+
     private var s1r1isBig: Bool = false
 
     private lazy var boopButton: UIButton = {
         let boopButton = UIButton(type: .system)
         boopButton.setTitle("Boop", for: .normal)
+
+
         boopButton.addTarget(self, action: #selector(didTapBoopButton), for: .touchUpInside)
+
+        return boopButton
+    }()
+
+    private lazy var boop2Button: UIButton = {
+        let boopButton = UIButton(type: .system)
+        boopButton.setTitle("Boop 2", for: .normal)
+        boopButton.addTarget(self, action: #selector(didTapBoop2Button), for: .touchUpInside)
         return boopButton
     }()
 
@@ -34,7 +57,8 @@ class ViewController: UIViewController {
         self.view.backgroundColor = UIColor.lightGray
         tableView.backgroundColor = UIColor.gray
 
-        tableView.register(SandboxCell.self, forCellReuseIdentifier: "cell")
+        tableView.register(SandboxCell.self, forCellReuseIdentifier: "greenCell")
+        tableView.register(Sandbox2Cell.self, forCellReuseIdentifier: "blueCell")
         tableView.clipsToBounds = false
 
         tableView.bounces = false
@@ -69,22 +93,39 @@ class ViewController: UIViewController {
 
         boopButton.frame = CGRect(x: 210, y: 30, width: 150, height: 30)
         self.view.addSubview(boopButton)
+
+        boop2Button.frame = CGRect(x: 210, y: 90, width: 150, height: 30)
+        view.addSubview(boop2Button)
     }
 
     @objc func didTapBoopButton() {
-        s1r1isBig.toggle()
+//        s1r1isBig.toggle()
         triggerHeightChangeAnimation()
+//        triggerScrollAnimation()
     }
 
-    private func triggerHeightChangeAnimation() {
+    @objc func didTapBoop2Button() {
+//        tableView.reloadData()
+        DispatchQueue.main.asyncAfter(wallDeadline: .now() + 2.0) { [weak self] in
+            self?.triggerHeightChangeAnimation()
+        }
+    }
+
+    @objc private func triggerHeightChangeAnimation() {
+        s1r1isBig.toggle()
         tableView.beginUpdates()
         tableView.endUpdates()
+    }
+
+    private func triggerScrollAnimation() {
+        let fiftyDown = CGPoint(x: tableView.contentOffset.x, y: tableView.contentOffset.y + 50)
+        tableView.setContentOffset(fiftyDown, animated: true)
     }
 }
 
 extension ViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 10
+        return section == 0 ? 10 : 5
     }
 
     func numberOfSections(in tableView: UITableView) -> Int {
@@ -92,8 +133,13 @@ extension ViewController: UITableViewDataSource {
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
-        cell.textLabel?.text = "\(indexPath.section).\(indexPath.row)"
+        let reuseIdentifier = indexPath.row % 2 == 0 ? "blueCell" : "greenCell"
+        let cell = tableView.dequeueReusableCell(withIdentifier: reuseIdentifier, for: indexPath)
+        if indexPath.row % 2 == 0 {
+            let blueCell = cell as! Sandbox2Cell
+            blueCell.myTextLabel.text = "Haha"
+        }
+        cell.textLabel?.text = "\(indexPath.section).\(movieNames[indexPath.row])"
         cell.backgroundColor = .white
         return cell
     }
@@ -144,5 +190,39 @@ extension ViewController: UITableViewDelegate {
         }
 
         return s1r1isBig ? 84 : 44
+    }
+
+    // MARK: UIScrollViewDelegate
+
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        print(#function + "\(scrollView.contentOffset.y)" + " \(maxTableViewContentOffset)" + " \(tableView.contentSize.height)")
+    }
+
+    func scrollViewDidEndScrollingAnimation(_ scrollView: UIScrollView) {
+        print(#function + "\(scrollView.contentOffset.y)" + "\(maxTableViewContentOffset)")
+    }
+
+    func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
+        print(#function + "\(scrollView.contentOffset.y)" + "\(maxTableViewContentOffset)")
+    }
+
+    func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
+        print(#function + "\(scrollView.contentOffset.y)" + "\(maxTableViewContentOffset)")
+    }
+
+    func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
+        print(#function + "\(scrollView.contentOffset.y)" + "\(maxTableViewContentOffset)")
+    }
+
+    private var maxTableViewContentOffset: CGFloat {
+        return max(0, tableView.contentSize.height - (tableViewHeight - tableView.contentInset.top - tableView.contentInset.bottom))
+    }
+
+    private var tableViewHeight: CGFloat {
+        if #available(iOS 11.0, *) {
+            return tableView.frame.inset(by: tableView.safeAreaInsets).height
+        } else {
+            return tableView.bounds.height
+        }
     }
 }
