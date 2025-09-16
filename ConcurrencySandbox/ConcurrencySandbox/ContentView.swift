@@ -35,7 +35,9 @@ struct ContentView: View {
 //        print("Before printThreadIDBeforeAndAfterAwait \(currentThreadID())") // 4203546, main thread
 //        await printThreadIDBeforeAndAfterAwait()
 
-        try? await loopThroughAsyncSequence()
+//        try? await loopThroughAsyncSequence()
+
+        try? await callAsyncLet()
     }
 
     nonisolated func printThreadIDBeforeAndAfterAwait() async {
@@ -64,6 +66,30 @@ struct ContentView: View {
             // same thread.
             print("\(number) \(currentThreadID())")
         }
+    }
+
+    // This should be nonisolated otherwise everything is on main thread
+    nonisolated func callAsyncLet() async throws {
+        async let secondsSlept1 = asyncSleepFunction()
+        async let secondsSlept2 = asyncSleepFunction()
+        async let secondsSlept3 = asyncSleepFunction()
+
+        // Calling `asyncSleepFunction` triggers one of the three on the same thread, and the other
+        // 2 on different threads.
+        // One of the three threads ends on the same thread as the post-await thread.
+        print("Before awaiting for results \(currentThreadID())") // 4277128
+        let results = try await [secondsSlept1, secondsSlept2, secondsSlept3] // 4277141, 4277149, 4277128
+        print("After awaiting for results \(currentThreadID())") // 4277141
+        print(results)
+    }
+
+    // This should be nonisolated otherwise everything is on main thread
+    nonisolated func asyncSleepFunction() async throws -> Int {
+        let secondsToSleep = Int.random(in: 1...3)
+        print("Before sleeping for \(secondsToSleep) seconds... \(currentThreadID())")
+        try await Task.sleep(for: .seconds(secondsToSleep))
+        print("After sleeping for \(secondsToSleep) seconds... \(currentThreadID())")
+        return secondsToSleep
     }
 }
 
