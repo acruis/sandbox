@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import AsyncAlgorithms
 
 struct ContentView: View {
 
@@ -21,8 +22,8 @@ struct ContentView: View {
             print("Before Task \(currentThreadID())") // 4203546, main thread
             Task {
                 // If we run `Task.detached` instead, we'll get a different thread here.
-                // However, we'll be back on main after entering `runAsyncCode`, as it is not `nonisolated`
-                // and `View` is `@MainActor`.
+                // However, we'll be back on main after entering `runAsyncCode`, as it is not
+                // `nonisolated` and `View` is `@MainActor`.
                 print("Before runAsyncCode \(currentThreadID())") // 4203546, main thread
                 await runAsyncCode()
             }
@@ -50,10 +51,18 @@ struct ContentView: View {
     }
 
     func loopThroughAsyncSequence() async throws {
-        let handle = FileHandle.standardInput
+        let asyncSequence = [0,1,2,3,4].async
 
-        for try await line in handle.bytes.lines {
-            print(line)
+        for try await number in asyncSequence {
+            // Main thread
+            // 0 4255077
+            // 1 4255077
+            // 2 4255077
+            // 3 4255077
+            // 4 4255077
+            // Even if we mark this function as `nonisolated`, it still runs all iterations on the
+            // same thread.
+            print("\(number) \(currentThreadID())")
         }
     }
 }
